@@ -1,7 +1,7 @@
 {
-  "name": "theminator",
+  "name": "",
   "version": "1.0.0",
-  "description": "Stores and randomly picks from a list of inputs.",
+  "description": "",
   "main": "gulpfile.js",
   "dependencies": {},
   "devDependencies": {
@@ -12,7 +12,6 @@
     "eslint": "^0.21.0",
     "eslint-plugin-react": "^2.2.0",
     "gulp": "^3.8.11",
-    "gulp-es6-module-transpiler": "^0.2.1",
     "gulp-eslint": "^0.11.1",
     "gulp-html-replace": "^1.4.5",
     "gulp-livereload": "^3.8.0",
