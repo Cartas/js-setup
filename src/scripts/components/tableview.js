@@ -15,5 +15,5 @@ var TableView = React.createClass({
   }
 });
 
-module.exports = TableView;
+export default TableView;
 

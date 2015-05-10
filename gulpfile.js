@@ -8,9 +8,10 @@ var reactify = require("reactify");
 var streamify = require("gulp-streamify");
 var livereload = require("gulp-livereload");
 var notify = require("gulp-notify");
+var notifier = require("node-notifier");
 var eslint = require("gulp-eslint");
-var babel = require("gulp-babel");
 var del = require("del");
+var babelify = require("babelify");
 
 var path = {
   HTML: "src/index.html",
@@ -21,6 +22,12 @@ var path = {
   DEST_SRC: "dist/src",
   ENTRY_POINT: "./src/scripts/app.js"
 };
+
+function handleError(error) {
+  notifier.notify({title: "Error", message: "Build failed - read console for details."});
+  console.log(error.toString());
+  this.emit("end");
+}
 
 gulp.task("lint", function() {
   gulp.src([path.ENTRY_POINT, "src/scripts/**/*.js"])
@@ -41,7 +48,7 @@ gulp.task("watch", function() {
 
   var watcher = watchify(browserify({
     entries: [path.ENTRY_POINT],
-    transform: [reactify],
+    transform: [babelify, reactify],
     debug: true,
     cache: {},
     packagingCache: {},
@@ -50,9 +57,11 @@ gulp.task("watch", function() {
 
   return watcher.on("update", function() {
     watcher.bundle()
+      .on("error", handleError)
       .pipe(source(path.OUT))
       .pipe(gulp.dest(path.DEST_SRC))
-      .pipe(livereload());
+      .pipe(livereload())
+      .pipe(notify({title: "Build complete", message: "Site reloaded."}));
   }).bundle()
     .pipe(source(path.OUT))
     .pipe(gulp.dest(path.DEST_SRC));
