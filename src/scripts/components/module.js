@@ -8,5 +8,5 @@ const Row = React.createClass({
   }
 });
 
-export {Row};
+export default Row;
 
