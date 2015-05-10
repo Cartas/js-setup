@@ -8,35 +8,56 @@ var eslint = require("gulp-eslint");
 var babel = require("gulp-babel");
 var livereload = require("gulp-livereload");
 var del = require("del");
+var htmlreplace = require("gulp-html-replace");
 
-gulp.task("default", function() {
-	return gulp.src("src/scripts/**/*.js")
-        .pipe(babel())
-		.pipe(react())
-        .pipe(eslint())
-        .pipe(eslint.format())
-		.pipe(concat("main.js"))
-		.pipe(gulp.dest("dist/assets/js"))
-		.pipe(rename({suffix: ".min"}))
-		.pipe(uglify())
-		.pipe(gulp.dest("dist/assets/js"))
-		.pipe(notify({message: "Gulp complete."}));
+var htmlPath = "src/index.html";
+var jsPath = "src/scripts/**/*.js";
+
+var path = {
+  HTML: htmlPath,
+  JS: jsPath,
+  ALL: [htmlPath, jsPath],
+  MINIFIED: "build.min.js",
+  DEST_SRC: "dist/src",
+  DEST_BUILD: "dist/build",
+  DEST: "dist"
+};
+
+
+gulp.task("transform", function() {
+  gulp.src(path.JS)
+    .pipe(react())
+    .pipe(gulp.dest(path.DEST_SRC));
 });
 
-gulp.task("build", ["clean", "default"], function() {
-
-});
-
-
-gulp.task("clean", function(callback) {
-	del(["dist/assets/css", "dist/assets/js", "dist/assets/img"], callback);
+gulp.task("copy", function() {
+  gulp.src(path.HTML)
+    .pipe(gulp.dest(path.DEST));
 });
 
 gulp.task("watch", function() {
-	// Watch .js files
-	gulp.watch('src/scripts/**/*.js', ['default']);
+  gulp.watch(path.ALL, ["transform", "copy"]);
 
-	livereload.listen();
-
-	gulp.watch(["dist/**"]).on("change", livereload.changed);
+  livereload.listen();
+  gulp.watch(["dist/**"]).on("change", livereload.changed);
 });
+
+gulp.task("build", function() {
+  gulp.src(path.JS)
+    .pipe(react())
+    .pipe(concat(path.MINIFIED))
+    .pipe(uglify({file: path.MINIFIED}))
+    .pipe(gulp.dest(path.DEST_BUILD));
+});
+
+gulp.task("replaceHTML", function() {
+  gulp.src(path.HTML)
+    .pipe(htmlreplace({
+      "js": "build/" + path.MINIFIED
+    }))
+    .pipe(gulp.dest(path.DEST));
+});
+
+gulp.task("default", ["watch"]);
+
+gulp.task("production", ["replaceHTML", "build"]);
