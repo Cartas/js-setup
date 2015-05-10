@@ -14,7 +14,7 @@
     "quotes": [1, "double"],
     "eol-last": [1],
 
-    "react/display-name": 1,
+    "react/display-name": 0,
     "react/jsx-boolean-value": 1,
     "react/jsx-quotes": 1,
     "react/jsx-no-undef": 1,

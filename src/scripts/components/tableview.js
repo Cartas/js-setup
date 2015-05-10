@@ -1,3 +1,5 @@
+"use strict";
+const React = require("react");
 const Row = require("./module");
 
 var TableView = React.createClass({
@@ -16,4 +18,3 @@ var TableView = React.createClass({
 });
 
 export default TableView;
-

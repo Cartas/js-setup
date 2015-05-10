@@ -2,6 +2,10 @@
   "name": "",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cartas/js-setup.git"
+  },
   "main": "gulpfile.js",
   "dependencies": {},
   "devDependencies": {
@@ -20,6 +24,7 @@
     "gulp-streamify": "^0.0.5",
     "gulp-uglify": "^1.2.0",
     "node-notifier": "^4.2.1",
+    "react": "^0.13.3",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
