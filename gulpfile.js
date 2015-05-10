@@ -7,8 +7,9 @@ var watchify = require("watchify");
 var reactify = require("reactify");
 var streamify = require("gulp-streamify");
 var livereload = require("gulp-livereload");
+var notify = require("gulp-notify");
 var eslint = require("gulp-eslint");
-var babel = require("babel");
+var babel = require("gulp-babel");
 var del = require("del");
 
 var path = {
@@ -21,12 +22,19 @@ var path = {
   ENTRY_POINT: "./src/scripts/app.js"
 };
 
+gulp.task("lint", function() {
+  gulp.src([path.ENTRY_POINT, "src/scripts/**/*.js"])
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
+
 gulp.task("copy", function() {
   gulp.src(path.HTML)
     .pipe(gulp.dest(path.DEST));
 });
 
 gulp.task("watch", function() {
+  gulp.watch("src/scripts/**/*.js", ["lint"]);
   gulp.watch(path.HTML, ["replaceSrcHTML"]);
 
   livereload.listen();
